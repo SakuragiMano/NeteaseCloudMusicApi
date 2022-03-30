@@ -166,6 +166,17 @@ async function consturctServer(moduleDefs) {
     })
     next()
   })
+  
+  /**
+   * Add access restrictions to vercel 
+   */
+  app.use((req, res, next) => {
+    if (!process.env.VERCEL_SECRET || process.env.VERCEL_SECRET === req.query.secret) {
+      next()
+    } else {
+      res.status(404).end()
+    }
+  })
 
   /**
    * Body Parser and File Upload
